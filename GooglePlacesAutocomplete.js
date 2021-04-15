@@ -513,7 +513,7 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
 
       request.open(
         'GET',
-        `${url}/place/autocomplete/json?input=` +
+        `${url}/place/autocomplete/json?&input=` +
           encodeURIComponent(text) +
           '&' +
           Qs.stringify(props.query),
@@ -665,9 +665,7 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
   const _onBlur = (e) => {
     if (e && isNewFocusInAutocompleteResultList(e)) return;
 
-    if (!props.keepResultsAfterBlur) {
-      setListViewDisplayed(false);
-    }
+    setListViewDisplayed(false);
     inputRef?.current?.blur();
   };
 
@@ -801,26 +799,27 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
             ]}
             value={stateText}
             placeholder={props.placeholder}
+            placeholderTextColor={props.placeholderTextColor}
             onFocus={
               onFocus
-                ? () => {
-                    _onFocus();
-                    onFocus();
-                  }
-                : _onFocus
+              ? () => {
+                _onFocus();
+                onFocus();
+              }
+              : _onFocus
             }
             onBlur={
               onBlur
-                ? (e) => {
-                    _onBlur(e);
-                    onBlur();
-                  }
-                : _onBlur
+              ? (e) => {
+                _onBlur(e);
+                onBlur();
+              }
+              : _onBlur
             }
             clearButtonMode={clearButtonMode || 'while-editing'}
             onChangeText={_handleChangeText}
             {...userProps}
-          />
+            />
           {_renderRightButton()}
         </View>
       )}
@@ -848,7 +847,6 @@ GooglePlacesAutocomplete.propTypes = {
   listEmptyComponent: PropTypes.func,
   listUnderlayColor: PropTypes.string,
   listViewDisplayed: PropTypes.oneOf(['auto', PropTypes.bool]),
-  keepResultsAfterBlur: PropTypes.bool,
   minLength: PropTypes.number,
   nearbyPlacesAPI: PropTypes.string,
   numberOfLines: PropTypes.number,
@@ -857,6 +855,7 @@ GooglePlacesAutocomplete.propTypes = {
   onPress: PropTypes.func,
   onTimeout: PropTypes.func,
   placeholder: PropTypes.string,
+  placeholderTextColor: PropTypes.string,
   predefinedPlaces: PropTypes.array,
   predefinedPlacesAlwaysVisible: PropTypes.bool,
   preProcess: PropTypes.func,
@@ -897,7 +896,6 @@ GooglePlacesAutocomplete.defaultProps = {
   keyboardShouldPersistTaps: 'always',
   listUnderlayColor: '#c8c7cc',
   listViewDisplayed: 'auto',
-  keepResultsAfterBlur: false,
   minLength: 0,
   nearbyPlacesAPI: 'GooglePlacesSearch',
   numberOfLines: 1,
@@ -906,6 +904,7 @@ GooglePlacesAutocomplete.defaultProps = {
   onPress: () => {},
   onTimeout: () => console.warn('google places autocomplete: request timeout'),
   placeholder: '',
+  placeholderTextColor: "black",
   predefinedPlaces: [],
   predefinedPlacesAlwaysVisible: false,
   query: {
